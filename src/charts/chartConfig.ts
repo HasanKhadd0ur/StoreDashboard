@@ -12,4 +12,7 @@ export interface ChartConfig {
     dataSetURL:string;
     lineColor:string;
     timeFormat:string;
+    contextHeight:number;
+    contextMargin: { top: number; right: number; bottom: number; left: number } ;
+
 }

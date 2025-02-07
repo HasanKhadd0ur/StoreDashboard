@@ -14,7 +14,10 @@ export const ScatterChartConfig : ChartConfig = {
     dataSetURL:'/data/SuperStore_Sales_Dataset.csv',
     fields:['Sales','Quantity'],
     chartTitle: 'Vancouver Trails',
-    timeFormat:"%Y-%m-%d" 
+    timeFormat:"%Y-%m-%d" ,
+    contextHeight: 50,
+    contextMargin: {top: 280, right: 10, bottom: 20, left: 45}
+
 };
 
 // Default Configuration for line Chart
@@ -23,13 +26,34 @@ export const lineChartConfig : ChartConfig = {
     containerWidth: 800,
     containerHeight: 600,
     margin: { top: 50, right: 50, bottom: 50, left: 50 },
-    xField: 'Order Date', // Assuming you have a field for x-axis data
-    yField: 'Sales', // Assuming you have a field for y-axis data
-    fields: ['Order Date', 'Sales'], // Fields that are present in the dataset
+    xField: 'date', // Assuming you have a field for x-axis data
+    yField: 'close', // Assuming you have a field for y-axis data
+    fields: ['date', 'close'], // Fields that are present in the dataset
     color: 'steelblue',
     textColor: 'black',
     lineColor: 'steelblue',    
-    dataSetURL:'/data/SuperStore_Sales_Dataset.csv',
+    dataSetURL:'/data/sp_500_index.csv',
     chartTitle: 'SP 500 Index ',
-    timeFormat:"%d-%m-%Y" 
+    timeFormat:"%Y-%m-%d" ,
+    contextHeight: 50,
+    contextMargin: {top: 280, right: 10, bottom: 20, left: 45}
+
+};
+export const barChartConfig : ChartConfig = {
+    parentElement: '#bar-chart',
+    containerWidth: 800,
+    containerHeight: 600,
+    margin: { top: 50, right: 50, bottom: 50, left: 50 },
+    xField: 'month', // Assuming you have a field for x-axis data
+    yField: 'sales', // Assuming you have a field for y-axis data
+    fields: ['month', 'sales'], // Fields that are present in the dataset
+    color: 'steelblue',
+    textColor: 'black',
+    lineColor: 'steelblue',    
+    dataSetURL:'/data/sales.csv',
+    chartTitle: 'SP 500 Index ',
+    timeFormat:"%Y-%m-%d" ,
+    contextHeight: 50,
+    contextMargin: {top: 280, right: 10, bottom: 20, left: 45}
+
 };
