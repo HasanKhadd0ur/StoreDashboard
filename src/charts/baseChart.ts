@@ -67,8 +67,8 @@ export abstract class BaseChart {
 
     public updateVis() {
         const vis = this;
-
-        vis.xScale.domain(d3.extent(vis.data, d => d.xValue) as [number, number]);
+        // as [number, number]
+        vis.xScale.domain(d3.extent(vis.data, d => d.xValue));
 
         vis.yScale.domain([d3.min(vis.data,d => d.yValue )  * (0.95) , d3.max(vis.data, d => d.yValue) as number * 1.1] );
 

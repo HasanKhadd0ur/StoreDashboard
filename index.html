@@ -4,10 +4,44 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/style.css">
     <title>Store Dashboard</title>
   </head>
   <body>
-    <div id="app"></div>
-    <script type="module" src="/src/main.ts"></script>
+    <div id="dashboard">
+      <!-- Sidebar -->
+      <div id="sidebar">
+          <h2>Dashboard</h2>
+          <ul>
+              <li><a href="#" id="lineChartBtn">Line Chart</a></li>
+              <li><a href="#">Bar Chart</a></li>
+              <!-- Add more menu items as needed -->
+          </ul>
+      </div>
+
+      <!-- Main Content Area -->
+      <div id="main-content">
+          <!-- Header -->
+          <header>
+              <h1>Welcome to the Dashboard</h1>
+          </header>
+
+          <!-- Chart Container -->
+          <section id="chart-container">
+            <div id="scatter-chart"></div>
+            <div id="line-chart"></div>
+
+              <!-- The chart will be rendered here -->
+          </section>
+
+          <!-- Footer -->
+          <footer>
+              <p>&copy; 2025 Dashboard. All Rights Reserved.</p>
+          </footer>
+
+      </div>
+  </div>
+
+  <script type="module" src="/src/main.ts"></script>
   </body>
 </html>

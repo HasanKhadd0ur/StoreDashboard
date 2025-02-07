@@ -24,8 +24,8 @@ export const lineChartConfig : ChartConfig = {
     containerHeight: 600,
     margin: { top: 50, right: 50, bottom: 50, left: 50 },
     xField: 'Order Date', // Assuming you have a field for x-axis data
-    yField: 'Quantity', // Assuming you have a field for y-axis data
-    fields: ['Order Date', 'Quantity'], // Fields that are present in the dataset
+    yField: 'Sales', // Assuming you have a field for y-axis data
+    fields: ['Order Date', 'Sales'], // Fields that are present in the dataset
     color: 'steelblue',
     textColor: 'black',
     lineColor: 'steelblue',    

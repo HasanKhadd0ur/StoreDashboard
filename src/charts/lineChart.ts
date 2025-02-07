@@ -40,6 +40,15 @@ export class LineChart extends BaseChart {
 
     }
 
+    // public updateVis(): void {
+        
+    //     const vis = this;
+    
+    //     vis.xScale.domain(d3.extent(vis.data, d => d.xValue) as [Date, Date]);
+    //     vis.yScale.domain([0, d3.max(vis.data, d => d.yValue) as number]);
+    
+    //     vis.renderVis();
+    // }
 
     protected renderVis() {
         const vis = this;
@@ -88,13 +97,14 @@ export class LineChart extends BaseChart {
     protected mapData(data: any[]): void {
 
         const vis = this;
-
+        const parseTime = d3.timeParse("%d-%m-%Y");
         // Parse numeric values and map fields name
         vis.data = data.map(d => ({
-            xValue: new Date (d[this.config.xField]).getUTCDate()  ,
+            xValue:parseTime(d[vis.config.xField]) ,
             yValue: +d[this.config.yField]
         }));
 
+        
     // Log data to check for issues
     console.log(vis.data);
     }
