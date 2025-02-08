@@ -1,3 +1,4 @@
+import { ChartConfig } from "./charts/chartConfig";
 import { barChartConfig, lineChartConfig, ScatterChartConfig } from "./config/chartsConfigurating";
 import { chartRegistry } from "./config/registrationConfig";
 import { renderChart } from "./helpers/chartRenderer";
@@ -8,6 +9,25 @@ const scatterFilters = document.getElementById("scatter-filters") as HTMLElement
 const filterCheckboxes = document.querySelectorAll<HTMLInputElement>("#scatter-filters input");
 let currentChartType = "scatterChart";
 
+// Reference to the description element
+const chartDescription = document.getElementById('chart-description');
+
+// Function to update the chart description
+function updateChartDescription(config :ChartConfig) {
+    if (chartDescription) {
+        chartDescription.textContent = config.description;
+    }
+}
+
+// Event listener for chart type selection
+document.getElementById("chart-type")!.addEventListener("change", (event) => {
+    const selectedChart = (event.target as HTMLSelectElement).value;
+    
+    let config =chartRegistry.get(selectedChart).chartConfig;
+
+    updateChartDescription(config!);
+});
+
 // Function to load and render the selected chart
 const loadChart = () => {
     const selectedChart = chartSelect.value;
@@ -15,13 +35,9 @@ const loadChart = () => {
     // Show checkboxes only for scatter chart
     scatterFilters.style.display = selectedChart === "scatterChart" ? "block" : "none";
 
-    // Load the dataset
-    let config;
-    if (selectedChart === "barChart") config = barChartConfig;
-    else if (selectedChart === "lineChart") config = lineChartConfig;
-    else config = ScatterChartConfig;
+    let config = chartRegistry.get(selectedChart).chartConfig
 
-    DataLoader(config.dataSetURL, 100, (data: any[]) => {
+    DataLoader(config!.dataSetURL, 100, (data: any[]) => {
         // Apply filtering for scatter plot
         if (selectedChart === "scatterChart") {
             const selectedDifficulties = Array.from(filterCheckboxes)

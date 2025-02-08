@@ -14,5 +14,6 @@ export interface ChartConfig {
     timeFormat:string;
     contextHeight:number;
     contextMargin: { top: number; right: number; bottom: number; left: number } ;
+    description:string;
 
 }

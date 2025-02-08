@@ -16,7 +16,9 @@ export const ScatterChartConfig : ChartConfig = {
     chartTitle: 'Vancouver Trails',
     timeFormat:"%Y-%m-%d" ,
     contextHeight: 50,
-    contextMargin: {top: 280, right: 10, bottom: 20, left: 45}
+    contextMargin: {top: 280, right: 10, bottom: 20, left: 45},
+    description: "This line chart tracks the historical performance of the S&P 500 index over time."
+
 
 };
 
@@ -36,7 +38,9 @@ export const lineChartConfig : ChartConfig = {
     chartTitle: 'SP 500 Index ',
     timeFormat:"%Y-%m-%d" ,
     contextHeight: 50,
-    contextMargin: {top: 280, right: 10, bottom: 20, left: 45}
+    contextMargin: {top: 280, right: 10, bottom: 20, left: 45},
+    description: "This line chart tracks the historical performance of the S&P 500 index over time."
+
 
 };
 export const barChartConfig : ChartConfig = {
@@ -51,9 +55,10 @@ export const barChartConfig : ChartConfig = {
     textColor: 'black',
     lineColor: 'steelblue',    
     dataSetURL:'/data/sales.csv',
-    chartTitle: 'SP 500 Index ',
+    chartTitle: 'Monthly Sales Data',
     timeFormat:"%Y-%m-%d" ,
     contextHeight: 50,
-    contextMargin: {top: 280, right: 10, bottom: 20, left: 45}
+    contextMargin: {top: 280, right: 10, bottom: 20, left: 45},
+    description: "This bar chart shows monthly sales performance, helping analyze trends and seasonal variations."
 
 };
