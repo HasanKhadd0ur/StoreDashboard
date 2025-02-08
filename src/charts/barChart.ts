@@ -6,20 +6,24 @@ export class BarChart extends BaseChart {
 
     protected initVis(): void {
         const vis = this;
-
         super.initVis();
-        super.initCanvas();
         vis.setupScales();
-        
-        // // Create x and y axes
-        vis.xAxis = vis.chart.append("g").attr("class", "x-axis").attr("transform", `translate(0,${vis.height})`);
-        vis.yAxis = vis.chart.append("g").attr("class", "y-axis");
+        vis.initCanvas();        
+
+        // Initialize chart
+        vis.updateVis();
+    }
+
+    protected initCanvas(): void {
+        const vis =this ;
+        super.initCanvas();
 
         // Create tooltip
         vis.createTooltip();
 
-        // Initialize chart
-        vis.updateVis();
+        // // Create x and y axes
+        vis.xAxis = vis.chart.append("g").attr("class", "x-axis").attr("transform", `translate(0,${vis.height})`);
+        vis.yAxis = vis.chart.append("g").attr("class", "y-axis");
     }
 
     protected createTooltip(): void {
@@ -47,32 +51,7 @@ export class BarChart extends BaseChart {
             .style("stroke-width", 2)
             .style("opacity", 0);
    
-        // Create overlay for mouse interaction
-        vis.overlay = vis.chart
-            .append("rect")
-            .attr("width", vis.width)
-            .attr("height", vis.height)
-            .style("opacity", 0)
-            .on("mouseover", (event, d) => vis.onMouseOver(event, d))
-            .on("mousemove", (event) => vis.onMouseMove(event))
-            .on("mouseout", () => vis.onMouseOut());
     }
-
-    protected setupScales() {
-        const vis = this;
-        
-        
-        // Band scale for categorical x-axis (e.g., 'Product Name', 'Customer Name')
-        vis.xScale = d3.scaleBand()
-            .domain(vis.data.map(d => d.xValue)) // Map categories
-            .range([0, vis.width])
-            .padding(0.1);
-
-        // Linear scale for numerical y-axis (e.g., 'Sales', 'Profit')
-        vis.yScale = d3.scaleLinear()
-            .range([vis.height, 0]);
-    }
-
     public updateVis() {
         const vis = this;
 
@@ -96,7 +75,7 @@ export class BarChart extends BaseChart {
         const bars = vis.chart.selectAll('.bar')
             .data(vis.data, d => d.xValue);
 
-            bars.enter()
+        bars.enter()
             .append('rect')
             .attr('class', 'bar')
             .attr('x', d => vis.xScale(d.xValue) as number)
@@ -119,6 +98,19 @@ export class BarChart extends BaseChart {
         vis.yAxis.call(d3.axisLeft(vis.yScale));
         
     }
+
+    protected setupScales() {
+        const vis = this;
+        
+        vis.xScale = d3.scaleBand()
+            .domain(vis.data.map(d => d.xValue)) // Map categories
+            .range([0, vis.width])
+            .padding(0.1);
+
+        vis.yScale = d3.scaleLinear()
+            .range([vis.height, 0]);
+    }
+
     
     /// this is listiner in the mous movement out 
     // to make the tooltip invisible 
@@ -133,18 +125,24 @@ export class BarChart extends BaseChart {
    
     protected onMouseOver(event: any, d: any) {
         const vis = this;
-        if(d){
         vis.tooltip
             .transition().duration(200)
             .style("opacity", 1);
 
         vis.tooltip
             .html(`
-                <strong>${d.xValue}</strong><br/>
-                Value: <span style="color: yellow">${d.yValue}</span>
+                ${this.config.xField}: <strong>${d.xValue}</strong><br/>
+                ${this.config.yField}: ${d.yValue}
             `)
             .style("left", (event.pageX + 10) + "px")
             .style("top", (event.pageY - 40) + "px");
+
+            vis.highlightRect = vis.chart.append("rect")
+            .attr("class", "highlight-rect")
+            .style("fill", "none")
+            .style("stroke", "blue")
+            .style("stroke-width", 2)
+            .style("opacity", 0);
 
         // Highlight the bar with a rectangle
         vis.highlightRect
@@ -154,7 +152,7 @@ export class BarChart extends BaseChart {
             .attr("height", vis.height - vis.yScale(d.yValue))
             .transition().duration(200)
             .style("opacity", 1);
-        }
+        
     }
 
     protected onMouseMove(event: any) {
