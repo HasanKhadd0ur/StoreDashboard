@@ -18,7 +18,10 @@ export abstract class BaseChart {
     protected tooltip: d3.Selection<HTMLDivElement, unknown, HTMLElement, any>;
     protected overlay: d3.Selection<SVGRectElement, unknown, HTMLElement, undefined>;
     protected tooltipCircle: d3.Selection<SVGCircleElement, unknown, HTMLElement, undefined>;
+    protected xValueAccessor = (d: any )=> d.xValue;
+    protected yValueAccessor = (d: any )=> d.yValue;
 
+ 
     
     constructor(config: ChartConfig, data: any[]) {
         this.config = config;
@@ -33,7 +36,23 @@ export abstract class BaseChart {
 
         vis.width = vis.config.containerWidth - vis.config.margin.left - vis.config.margin.right;
         vis.height = vis.config.containerHeight - vis.config.margin.top - vis.config.margin.bottom;
-        
+        // this.initCanvas();
+
+    }
+
+    public updateVis() {
+        const vis = this;
+        // as [number, number]
+        vis.xScale.domain(d3.extent(vis.data, vis.xValueAccessor));
+
+        vis.yScale.domain(d3.extent(vis.data ,vis.yValueAccessor) );
+
+        vis.renderVis();
+    }
+    
+    protected initCanvas(){
+        const vis =this;
+
         // Create the SVG element which is the container of all other elements
         vis.svg = d3.select(vis.config.parentElement)
             .append('svg')
@@ -64,17 +83,6 @@ export abstract class BaseChart {
             .text(`${vis.config.chartTitle}`);
 
     }
-
-    public updateVis() {
-        const vis = this;
-        // as [number, number]
-        vis.xScale.domain(d3.extent(vis.data, d => d.xValue));
-
-        vis.yScale.domain([d3.min(vis.data,d => d.yValue )  * (0.95) , d3.max(vis.data, d => d.yValue) as number * 1.1] );
-
-        vis.renderVis();
-    }
-
     protected abstract renderVis(): void;
 
     protected setupScales(){
@@ -84,7 +92,7 @@ export abstract class BaseChart {
         vis.xScale = d3.scaleTime().range([0, vis.width]);
 
         // Linear scale for the value field
-        vis.yScale = d3.scaleLinear().range([vis.height, 0]);  
+        vis.yScale = d3.scaleLinear().range([vis.height, 0]).nice();  
     }
 
     // create the tool tip element to show helpfull text to the user when over the path 
@@ -105,9 +113,9 @@ export abstract class BaseChart {
             .style("opacity", 0)
             
             // mouse events listners 
-            .on("mouseover", (event,d) => this.onMouseOver(event,d))
-            .on("mousemove", (event) => this.onMouseMove(event))
-            .on("mouseout", () => this.onMouseOut());
+            .on("mouseover", (event,d) => vis.onMouseOver(event,d))
+            .on("mousemove", (event) => vis.onMouseMove(event))
+            .on("mouseout", () => vis.onMouseOut());
 
     }
 
