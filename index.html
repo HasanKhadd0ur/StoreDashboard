@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/style.css">
+    <title>Store Dashboard</title>
+  <script type="module" crossorigin src="/assets/index-BR69-y6c.js"></script>
+</head>
+<body>
+    <div id="dashboard">
+        <!-- Sidebar -->
+        <div id="sidebar">
+            <h2>Dashboard</h2>
+
+            <!-- User Info -->
+            <div id="user-info">
+                <img src="/favicon.png" alt="User Avatar">
+                <p> Hasan Khaddour</p>
+                <p><strong>Role:</strong> Admin</p>
+            </div>
+
+            <!-- Chart Selection -->
+            <div id="chart-controls">
+                <label for="chart-type">Select Plot Type:</label>
+                <select id="chart-type">
+                    <option value="barChart">Sales Distribution</option>
+                    <option value="lineChart">SP 500 Index</option>
+                    <option value="scatterChart">Scatter Dist</option>
+                    <option value="contextVisChart">Context Plot</option>
+                </select>
+
+                <!-- Difficulty Filters (Only for Scatter Plot) -->
+                <div id="scatter-filters" style="display: none;">
+                    <label><input type="checkbox" id="filter-easy" value="Easy" checked> Easy</label>
+                    <label><input type="checkbox" id="filter-intermediate" value="Intermediate" checked> Intermediate</label>
+                    <label><input type="checkbox" id="filter-hard" value="Difficult" checked> Difficult</label>
+                </div>
+            </div>
+
+            <!-- Chart Description -->
+            <div id="chart-description-container">
+                <h3>Chart Description</h3>
+                <p id="chart-description">Select a chart to see details.</p>
+            </div>
+        </div>
+
+        <!-- Main Content Area -->
+        <div id="main-content">
+            <!-- Chart Container -->
+            <section id="chart-container">
+                <div id="chart"></div>
+            </section>
+
+            <!-- Footer -->
+            <footer>
+                <p>&copy; 2025 Dashboard. All Rights Reserved.</p>
+            </footer>
+        </div>
+    </div>
+
+</body>
+</html>
