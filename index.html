@@ -12,37 +12,40 @@
       <!-- Sidebar -->
       <div id="sidebar">
           <h2>Dashboard</h2>
-          <ul>
-              <li><a href="#" id="lineChartBtn">Line Chart</a></li>
-              <li><a href="#">Bar Chart</a></li>
-              <!-- Add more menu items as needed -->
-          </ul>
+
+          <!-- Chart Selection Dropdown -->
+          <div id="chart-controls">
+              <label for="chart-type">Select Chart Type:</label>
+              <select id="chart-type">
+                  <option value="barChart">Bar Chart</option>
+                  <option value="lineChart">Line Chart</option>
+                  <option value="scatterChart">Scatter Plot</option>
+              </select>
+
+              <!-- Difficulty Filters (Only for Scatter Plot) -->
+              <div id="scatter-filters" style="display: none;">
+                  <label><input type="checkbox" id="filter-easy" value="Easy" checked> Easy</label>
+                  <label><input type="checkbox" id="filter-intermediate" value="Intermediate" checked> Intermediate</label>
+                  <label><input type="checkbox" id="filter-hard" value="Hard" checked> Hard</label>
+              </div>
+          </div>
       </div>
 
       <!-- Main Content Area -->
       <div id="main-content">
-          <!-- Header -->
-          <header>
-              <h1>Welcome to the Dashboard</h1>
-          </header>
-
           <!-- Chart Container -->
           <section id="chart-container">
-            <div id="scatter-chart"></div>
-            <div id="line-chart"></div>
-            <div id="bar-chart"></div>
-
-              <!-- The chart will be rendered here -->
+              <div id="chart"></div>
+              <p id="chart-description">Select a chart type to view the data.</p>
           </section>
 
           <!-- Footer -->
           <footer>
               <p>&copy; 2025 Dashboard. All Rights Reserved.</p>
           </footer>
-
       </div>
-  </div>
+    </div>
 
-  <script type="module" src="/src/main.ts"></script>
+    <script type="module" src="/src/main.ts"></script>
   </body>
 </html>

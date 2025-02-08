@@ -2,7 +2,7 @@ import { ChartConfig } from "../charts/chartConfig";
 
 // Default Configuration for line Chart
 export const ScatterChartConfig : ChartConfig = {
-    parentElement: '#scatter-chart',
+    parentElement: '#chart',
     containerWidth: 800,
     containerHeight: 600,
     margin: { top: 50, right: 50, bottom: 50, left: 50 },
@@ -22,7 +22,7 @@ export const ScatterChartConfig : ChartConfig = {
 
 // Default Configuration for line Chart
 export const lineChartConfig : ChartConfig = {
-    parentElement: '#line-chart',
+    parentElement: '#chart',
     containerWidth: 800,
     containerHeight: 600,
     margin: { top: 50, right: 50, bottom: 50, left: 50 },
@@ -40,7 +40,7 @@ export const lineChartConfig : ChartConfig = {
 
 };
 export const barChartConfig : ChartConfig = {
-    parentElement: '#bar-chart',
+    parentElement: '#chart',
     containerWidth: 800,
     containerHeight: 600,
     margin: { top: 50, right: 50, bottom: 50, left: 50 },
