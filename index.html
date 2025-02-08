@@ -4,10 +4,48 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/style.css">
     <title>Store Dashboard</title>
   </head>
   <body>
-    <div id="app"></div>
+    <div id="dashboard">
+      <!-- Sidebar -->
+      <div id="sidebar">
+          <h2>Dashboard</h2>
+
+          <!-- Chart Selection Dropdown -->
+          <div id="chart-controls">
+              <label for="chart-type">Select Chart Type:</label>
+              <select id="chart-type">
+                  <option value="barChart">Bar Chart</option>
+                  <option value="lineChart">Line Chart</option>
+                  <option value="scatterChart">Scatter Plot</option>
+              </select>
+
+              <!-- Difficulty Filters (Only for Scatter Plot) -->
+              <div id="scatter-filters" style="display: none;">
+                  <label><input type="checkbox" id="filter-easy" value="Easy" checked> Easy</label>
+                  <label><input type="checkbox" id="filter-intermediate" value="Intermediate" checked> Intermediate</label>
+                  <label><input type="checkbox" id="filter-hard" value="Hard" checked> Hard</label>
+              </div>
+          </div>
+      </div>
+
+      <!-- Main Content Area -->
+      <div id="main-content">
+          <!-- Chart Container -->
+          <section id="chart-container">
+              <div id="chart"></div>
+              <p id="chart-description">Select a chart type to view the data.</p>
+          </section>
+
+          <!-- Footer -->
+          <footer>
+              <p>&copy; 2025 Dashboard. All Rights Reserved.</p>
+          </footer>
+      </div>
+    </div>
+
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>
