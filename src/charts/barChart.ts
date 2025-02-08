@@ -2,6 +2,7 @@ import * as d3 from 'd3';
 import { BaseChart } from './baseChart';
 
 export class BarChart extends BaseChart {
+    highlightRect: any;
 
     protected initVis(): void {
         const vis = this;
@@ -31,11 +32,21 @@ export class BarChart extends BaseChart {
             .attr("class", "tooltip")
             .style("opacity", 0)
             .style("position", "absolute")
-            .style("background-color", "lightgray")
-            .style("border", "1px solid #ccc")
-            .style("padding", "5px")
-            .style("pointer-events", "none");
-
+            .style("background", "rgba(0, 0, 0, 0.8)")
+            .style("color", "#fff")
+            .style("padding", "8px")
+            .style("border-radius", "5px")
+            .style("font-size", "12px")
+            .style("pointer-events", "none")
+            .style("box-shadow", "0px 4px 8px rgba(0,0,0,0.3)");
+        
+        vis.highlightRect = vis.chart.append("rect")
+            .attr("class", "highlight-rect")
+            .style("fill", "none")
+            .style("stroke", "orange")
+            .style("stroke-width", 2)
+            .style("opacity", 0);
+   
         // Create overlay for mouse interaction
         vis.overlay = vis.chart
             .append("rect")
@@ -85,8 +96,7 @@ export class BarChart extends BaseChart {
         const bars = vis.chart.selectAll('.bar')
             .data(vis.data, d => d.xValue);
 
-        // ENTER: Create new bars
-        bars.enter()
+            bars.enter()
             .append('rect')
             .attr('class', 'bar')
             .attr('x', d => vis.xScale(d.xValue) as number)
@@ -94,17 +104,16 @@ export class BarChart extends BaseChart {
             .attr('width', vis.xScale.bandwidth())
             .attr('height', d => vis.height - vis.yScale(d.yValue))
             .attr('fill', 'steelblue')
-            .on('mouseover', (event :any , d: any ) => vis.onMouseOver(event, d))
-            .on('mousemove', (event :any ) => vis.onMouseMove(event))
+            .on('mouseover', (event, d) => vis.onMouseOver(event, d))
+            .on('mousemove', (event) => vis.onMouseMove(event))
             .on('mouseout', () => vis.onMouseOut())
-            .merge(bars) // Handle updates
+            .merge(bars)
             .transition().duration(500)
             .attr('y', d => vis.yScale(d.yValue))
             .attr('height', d => vis.height - vis.yScale(d.yValue));
 
-        // EXIT: Remove unused bars
         bars.exit().remove();
-        
+                
         // update the axes
         vis.xAxis.call(d3.axisBottom(vis.xScale));
         vis.yAxis.call(d3.axisLeft(vis.yScale));
@@ -114,31 +123,46 @@ export class BarChart extends BaseChart {
     /// this is listiner in the mous movement out 
     // to make the tooltip invisible 
     protected onMouseOut() {
-        const vis = this ;
-        vis.tooltip.style("opacity", 0);
+        const vis = this;
+        vis.tooltip.transition().duration(200).style("opacity", 0);
+        vis.highlightRect.transition().duration(200).style("opacity", 0);
     }
 
     // this is listiner in the mous movement over the bar item  
     // to make the tooltip visible nad give it its data  
-    protected onMouseOver(event : any , d :any ) {
-        const vis =this ;
-        console.log(d)
+   
+    protected onMouseOver(event: any, d: any) {
+        const vis = this;
+        if(d){
         vis.tooltip
-            .style("opacity", 1)
-            .text(`${d.xValue}`)
+            .transition().duration(200)
+            .style("opacity", 1);
+
+        vis.tooltip
+            .html(`
+                <strong>${d.xValue}</strong><br/>
+                Value: <span style="color: yellow">${d.yValue}</span>
+            `)
             .style("left", (event.pageX + 10) + "px")
-            .style("top", (event.pageY - 28) + "px");
+            .style("top", (event.pageY - 40) + "px");
+
+        // Highlight the bar with a rectangle
+        vis.highlightRect
+            .attr("x", vis.xScale(d.xValue))
+            .attr("y", vis.yScale(d.yValue))
+            .attr("width", vis.xScale.bandwidth())
+            .attr("height", vis.height - vis.yScale(d.yValue))
+            .transition().duration(200)
+            .style("opacity", 1);
+        }
     }
 
-    /// this is listiner in the mous movement move  
-    // to make the tooltip position on the mouse coordinates 
-    protected onMouseMove(event :any ) 
-    {
-        const vis =this;
+    protected onMouseMove(event: any) {
+        const vis = this;
 
         vis.tooltip
             .style("left", (event.pageX + 10) + "px")
-            .style("top", (event.pageY - 28) + "px");
+            .style("top", (event.pageY - 40) + "px");
     }
 
 }
