@@ -12,7 +12,7 @@ export function renderChart(chartType: string,data :any[],chartRegistry : ChartR
     if (ChartRegistration.chartClass) {
 
         let chart = new ChartRegistration.chartClass(ChartRegistration.chartConfig, data);
-        chart.updateVis();
+        // chart.updateVis();
         return chart ;
 
     } else {

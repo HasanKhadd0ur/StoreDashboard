@@ -5,7 +5,7 @@ import { DataLoader } from "./helpers/dataLoader";
 
 
 // Load the data asynchronously and render the chart
-DataLoader(barChartConfig.dataSetURL, 1000, (data: any[]) => {
-    renderChart('barChart', data, chartRegistry);
+DataLoader(ScatterChartConfig.dataSetURL, 100, (data: any[]) => {
+    renderChart('scatterChart', data, chartRegistry);
 });
 

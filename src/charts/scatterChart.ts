@@ -7,32 +7,12 @@ export class ScatterChart extends BaseChart {
 
     protected initVis() {
      
-        const vis = this;
-        
         super.initVis();
+        this.setupScales();
+        this.initCanvas();
 
-        vis.colorScale = d3.scaleOrdinal()
-             .range(['#d3eecd', '#7bc77e', '#2a8d46'])
-             .domain(['Easy', 'Intermediate', 'Difficult']);
+        this.updateVis();
 
-        
-        vis.setupScales();
-
-
-        vis.tooltip = d3.select(vis.config.parentElement)
-            .append("div")
-            .attr("class", "tooltip")
-            .style("opacity", 0);
-               
-
-          
-        // Ooerlay rectangle for capturing mouse events
-        vis.overlay = vis.chart.append("rect")
-            .attr("width", vis.width)
-            .attr("height", vis.height)
-            .style("opacity", 0)
-        
-        vis.colorValue = d => d.difficulty as string;
     }
 
 
@@ -40,7 +20,7 @@ export class ScatterChart extends BaseChart {
         let vis = this;
 
         // Set the scale input domains
-        vis.xScale.domain([0, d3.max(vis.data, d => d.xValue)*1.4]);
+        vis.xScale.domain(d3.extent(vis.data,vis.xValueAccessor));
         vis.yScale.domain([0, d3.max(vis.data,  d => d.yValue)*2.9]);
     
         vis.renderVis();
@@ -63,6 +43,7 @@ export class ScatterChart extends BaseChart {
             .attr('r', 4)
             .attr('cx', d => vis.xScale(d[vis.config.xField]))
             .attr('cy', d => vis.yScale(d[vis.config.yField]))
+            .attr('fill', d => vis.colorScale(d.difficulty ))
             .on("mouseover", (event,d) => this.onMouseOver(event,d))
             .on("mousemove", (event) => this.onMouseMove(event))
             .on("mouseout", () => this.onMouseOut())
@@ -77,7 +58,31 @@ export class ScatterChart extends BaseChart {
         vis.yAxis.call(d3.axisLeft(vis.yScale).ticks(6));
         
     }
+    protected initCanvas(): void {
+        const vis =this;
+        super.initCanvas();
 
+        vis.colorScale = d3.scaleOrdinal()
+            .range(['#d3eecd', '#7bc77e', '#2a8d46'])
+            .domain(['Easy', 'Intermediate', 'Difficult']);
+
+       vis.tooltip = d3.select(vis.config.parentElement)
+            .append("div")
+            .attr("class", "tooltip")
+            .style("opacity", 0);
+                
+
+            
+        // Ooerlay rectangle for capturing mouse events
+        vis.overlay = vis.chart.append("rect")
+            .attr("width", vis.width)
+            .attr("height", vis.height)
+            .style("opacity", 0)
+        
+        vis.colorValue = d => d.difficulty as string;
+
+
+    }
     protected onMouseOver(_event : any,d:any): void {
         const vis= this;
         

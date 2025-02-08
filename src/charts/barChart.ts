@@ -7,15 +7,12 @@ export class BarChart extends BaseChart {
         const vis = this;
 
         super.initVis();
-        
-        // Initialize scales
-        vis.xScale = d3.scaleBand().range([0, vis.width]).padding(0.1);
-        vis.yScale = d3.scaleLinear().range([vis.height, 0]);
+        super.initCanvas();
         vis.setupScales();
         
         // // Create x and y axes
-        // vis.xAxis = vis.chart.append("g").attr("class", "x-axis").attr("transform", `translate(0,${vis.height})`);
-        // vis.yAxis = vis.chart.append("g").attr("class", "y-axis");
+        vis.xAxis = vis.chart.append("g").attr("class", "x-axis").attr("transform", `translate(0,${vis.height})`);
+        vis.yAxis = vis.chart.append("g").attr("class", "y-axis");
 
         // Create tooltip
         vis.createTooltip();
@@ -53,6 +50,7 @@ export class BarChart extends BaseChart {
     protected setupScales() {
         const vis = this;
         
+        
         // Band scale for categorical x-axis (e.g., 'Product Name', 'Customer Name')
         vis.xScale = d3.scaleBand()
             .domain(vis.data.map(d => d.xValue)) // Map categories
@@ -68,7 +66,10 @@ export class BarChart extends BaseChart {
         const vis = this;
 
         // Update y scale domain based on selected field
-        vis.yScale.domain([0, d3.max(vis.data, d => d.yValue) as number]);
+        // vis.yScale.domain([0, d3.max(vis.data, d => d.yValue) as number]);
+        // vis.yScale.domain(d3.extent(vis.data,vis.yValueAccessor));
+        // vis.xScale.domain(d3.extent(vis.data,vis.xValueAccessor));
+        vis.yScale.domain([0, d3.max(vis.data, vis.yValueAccessor)*4]);
 
         // Update x-axis labels
         vis.xAxis.transition().duration(500).call(d3.axisBottom(vis.xScale));
