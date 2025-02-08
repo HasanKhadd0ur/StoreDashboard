@@ -1,5 +1,4 @@
 import { ChartConfig } from "./charts/chartConfig";
-import { barChartConfig, lineChartConfig, ScatterChartConfig } from "./config/chartsConfigurating";
 import { chartRegistry } from "./config/registrationConfig";
 import { renderChart } from "./helpers/chartRenderer";
 import { DataLoader } from "./helpers/dataLoader";

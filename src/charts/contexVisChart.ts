@@ -1,4 +1,3 @@
-import { BaseChart } from './baseChart';
 import * as d3 from 'd3';
 import { LineChart } from './lineChart';
 
