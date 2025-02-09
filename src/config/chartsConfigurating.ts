@@ -28,9 +28,9 @@ export const lineChartConfig : ChartConfig = {
     containerWidth: 800,
     containerHeight: 600,
     margin: { top: 50, right: 50, bottom: 50, left: 50 },
-    xField: 'date', // Assuming you have a field for x-axis data
-    yField: 'close', // Assuming you have a field for y-axis data
-    fields: ['date', 'close'], // Fields that are present in the dataset
+    xField: 'date', 
+    yField: 'close', 
+    fields: ['date', 'close'], 
     color: 'steelblue',
     textColor: 'black',
     lineColor: 'steelblue',    
@@ -48,9 +48,29 @@ export const barChartConfig : ChartConfig = {
     containerWidth: 800,
     containerHeight: 600,
     margin: { top: 50, right: 50, bottom: 50, left: 50 },
-    xField: 'month', // Assuming you have a field for x-axis data
-    yField: 'sales', // Assuming you have a field for y-axis data
-    fields: ['month', 'sales'], // Fields that are present in the dataset
+    xField: 'month', 
+    yField: 'sales', 
+    fields: ['month', 'sales'], 
+    color: 'steelblue',
+    textColor: 'black',
+    lineColor: 'steelblue',    
+    dataSetURL:'/assets/data/sales.csv',
+    chartTitle: 'Monthly Sales Data',
+    timeFormat:"%Y-%m-%d" ,
+    contextHeight: 50,
+    contextMargin: {top: 280, right: 10, bottom: 20, left: 45},
+    description: "This bar chart shows monthly sales performance, helping analyze trends and seasonal variations."
+
+};
+
+export const pieChartConfig : ChartConfig = {
+    parentElement: '#chart',
+    containerWidth: 800,
+    containerHeight: 600,
+    margin: { top: 50, right: 50, bottom: 50, left: 50 },
+    xField: 'month', 
+    yField: 'sales', 
+    fields: ['month', 'sales'],
     color: 'steelblue',
     textColor: 'black',
     lineColor: 'steelblue',    

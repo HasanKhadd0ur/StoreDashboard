@@ -297,3 +297,13 @@ footer {
   color: #666;
   font-size: 12px;
 }
+
+/* Add this to your stylesheet */
+.slice {
+  transition: all 0.2s ease-in-out;
+}
+
+.slice.border {
+  stroke: green;
+  stroke-width: 2;
+}
