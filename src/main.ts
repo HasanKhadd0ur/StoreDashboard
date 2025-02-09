@@ -1,3 +1,5 @@
+import './style.css';
+
 import { ChartConfig } from "./charts/chartConfig";
 import { chartRegistry } from "./config/registrationConfig";
 import { renderChart } from "./helpers/chartRenderer";
