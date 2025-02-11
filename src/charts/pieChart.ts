@@ -82,7 +82,7 @@ export class PieChart extends BaseChart {
         const slices = vis.chart.selectAll('.slice')
         .data(vis.pie(vis.data), (d: any) => d.data.xValue); // Ensure data-binding works with pie layout
 
-        const sliceElements = slices.enter()
+        slices.enter()
         .append('path')
         .attr('class', 'slice')
         .attr('d', vis.arc)
