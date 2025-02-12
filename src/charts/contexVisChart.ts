@@ -2,24 +2,18 @@ import * as d3 from "d3";
 import { LineChart } from "./lineChart";
 
 export class ContextVisChart extends LineChart {
-  private contextAreaPath: d3.Selection<
-    SVGPathElement,
-    unknown,
-    HTMLElement,
-    undefined
-  >;
-
+  // area path for the context chart 
+  private contextAreaPath: d3.Selection<SVGPathElement,unknown,HTMLElement, undefined>;
+  // scales y and x for the context chart 
   private xScaleContext: any;
   private yScaleContext: d3.ScaleLinear<number, number>;
 
   private brush: d3.BrushBehavior<any>;
   private brushG: d3.Selection<SVGGElement, unknown, HTMLElement, undefined>;
-  xAxisContext: any;
 
-  context: any;
+  xAxisContext: any;
   xAxisContextG: any;
-  xValue: (d: any) => any;
-  yValue: (d: any) => any;
+  context: any;
   area: any;
   bisectDate: any;
 
@@ -27,33 +21,29 @@ export class ContextVisChart extends LineChart {
     let vis = this;
 
     // super.initVis();
-    vis.width =
-      vis.config.containerWidth -
-      vis.config.margin.left -
-      vis.config.margin.right;
-    vis.height =
-      vis.config.containerHeight -
-      vis.config.contextHeight -
-      vis.config.margin.top -
-      vis.config.margin.bottom;
+    vis.width  =vis.config.containerWidth -vis.config.margin.left -vis.config.margin.right;
+    vis.height =vis.config.containerHeight - vis.config.contextHeight -vis.config.margin.top -vis.config.margin.bottom;
+
+    // setup scales 
     vis.setupScales();
     vis.initCanvas();
     vis.createTooltip();
 
     vis.updateVis();
   }
+
   protected initCanvas() {
     const vis = this;
 
     super.initCanvas();
 
+    // setup Scales for context chart 
     vis.xScaleContext = d3.scaleTime().range([0, vis.width]);
-
-    vis.yScaleContext = d3
-      .scaleLinear()
+    vis.yScaleContext = d3.scaleLinear()
       .range([vis.config.contextHeight, 0])
       .nice();
 
+    // craeat axis for context chart 
     vis.xAxisContext = d3.axisBottom(vis.xScaleContext).tickSizeOuter(0);
 
     // Move the context below the main chart
@@ -81,10 +71,7 @@ export class ContextVisChart extends LineChart {
     // Initialize brush component
     vis.brush = d3
       .brushX()
-      .extent([
-        [0, 0],
-        [vis.width, vis.config.contextHeight],
-      ])
+      .extent([[0, 0],[vis.width, vis.config.contextHeight],])
       .on("brush", function ({ selection }) {
         if (selection) vis.brushed(selection);
       })
@@ -114,9 +101,10 @@ export class ContextVisChart extends LineChart {
     // Set the scale input domains
     vis.xScale.domain(d3.extent(vis.data, vis.xValue));
     vis.yScale.domain(d3.extent(vis.data, vis.yValue));
+    // Set the scale input domains for the context 
     vis.xScaleContext.domain(vis.xScale.domain());
     vis.yScaleContext.domain(vis.yScale.domain());
-
+    // bisector for toolltip circel x value 
     vis.bisectDate = d3.bisector(vis.xValue).left;
 
     vis.renderVis();
@@ -132,32 +120,29 @@ export class ContextVisChart extends LineChart {
     vis.contextAreaPath
       .datum(vis.data)
       .attr('d', vis.area);
+
     vis.tooltipTrackingArea
       // mouse events listners
       .on("mouseover", (event, d) => vis.onMouseOver(event, d))
       .on("mousemove", (event) => vis.onMouseMove(event))
       .on("mouseout", () => vis.onMouseOut());
-    // Update the axes
+
+      // Update the axes
     vis.xAxisFocusG.call(vis.xAxis);
     vis.yAxisFocusG.call(vis.yAxis);
     vis.xAxisContextG.call(vis.xAxisContext);
 
     // Update the brush and define a default position
     const defaultBrushSelection = [
-      vis.xScale(new Date("2019-01-01")),
+      vis.xScale(new Date("2000")),
       vis.xScaleContext.range()[1],
     ];
     vis.brushG.call(vis.brush).call(vis.brush.move, defaultBrushSelection);
   }
 
-  /**
-   * React to brush events
-   */
   brushed(selection: any) {
     let vis = this;
 
-    vis.xScaleContext = d3.scaleTime().range([0, vis.width]);
-    vis.xScaleContext.domain(vis.xScale.domain());
 
     if (!vis.xScaleContext) {
       console.error("xScaleContext is not defined.");
@@ -166,7 +151,7 @@ export class ContextVisChart extends LineChart {
 
     // Check if the brush is still active or if it has been removed
     if (selection) {
-      // Convert given pixel coordinates (range: [x0, x1]) into a time period (domain: [Date, Date])
+      // Convert given pixel coordinates
       const selectedDomain = selection.map((d: number) =>
         vis.xScaleContext.invert(d)
       );
@@ -174,25 +159,13 @@ export class ContextVisChart extends LineChart {
       // Update x-scale of the focus view accordingly
       vis.xScale.domain(selectedDomain);
     } else {
-      // Reset x-scale of the focus view (full time period)
+      // Reset x-scale of the focus viewd
       vis.xScale.domain(vis.xScaleContext.domain());
     }
-
+    
     // Redraw line and update x-axis labels in focus view
     vis.linePath.attr("d", vis.line);
     vis.xAxisFocusG.call(vis.xAxis);
   }
 
-  protected mapData(data: any[]): void {
-    const vis = this;
-    const parseTime = d3.timeParse("%Y-%m-%d");
-    // Parse numeric values and map fields name
-    vis.data = data.map((d) => ({
-      xValue: parseTime(d[vis.config.xField]),
-      yValue: parseFloat(d[vis.config.yField]),
-    }));
-
-    // Log data to check for issues
-    console.log(vis.data);
-  }
 }

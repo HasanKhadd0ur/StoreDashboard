@@ -20,7 +20,9 @@ export abstract class BaseChart {
     protected tooltipCircle: d3.Selection<SVGCircleElement, unknown, HTMLElement, undefined>;
     protected xValueAccessor = (d: any )=> d.xValue;
     protected yValueAccessor = (d: any )=> d.yValue;
-
+    xValue: (d: any) => any;
+    yValue: (d: any) => any;
+    
  
     
     constructor(config: ChartConfig, data: any[]) {

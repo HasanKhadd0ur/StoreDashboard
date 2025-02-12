@@ -115,8 +115,8 @@ export class LineChart extends BaseChart {
 
         // Tooltip text
         vis.tooltip
-            .html(`<strong>Date:</strong> ${d3.timeFormat(vis.config.timeFormat)(closestPoint.xValue)}<br/>
-                   <strong>Value:</strong> ${closestPoint.yValue}`)
+            .html(`<strong>${vis.config.xField}:</strong> ${d3.timeFormat(vis.config.timeFormat)(closestPoint.xValue)}<br/>
+                   <strong>${vis.config.yField}:</strong> ${closestPoint.yValue}`)
             .style('left', `${event.pageX + 10}px`)
             .style('top', `${event.pageY - 28}px`);
 
@@ -144,9 +144,20 @@ export class LineChart extends BaseChart {
 
         // Parse numeric values and map fields name
         vis.data = data.map(d => ({
-            xValue: new Date(d3.timeParse(vis.config.timeFormat)(d[this.config.xField])),
+            xValue:new Date(d[this.config.xField]),
             yValue: d[this.config.yField]
         }));
+
+        const groupedData = d3.rollups(
+            vis.data,
+            (values) => d3.sum(values, (d) => d.yValue), // Sum Global Sales for each year
+            (d) => d.xValue
+        );
+    
+        vis.data= groupedData
+            .map(([year, yValue]) => ({ xValue: +year, yValue }))
+            .sort((a, b) => a.xValue - b.xValue); // Sort by year
+    
     }
     protected createTooltip(): void {
         const vis =this;

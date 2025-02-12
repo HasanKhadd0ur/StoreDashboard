@@ -7,22 +7,27 @@ export class BarChart extends BaseChart {
     protected initVis(): void {
         const vis = this;
         super.initVis();
+        // Setup Scales Domain
         vis.setupScales();
+        // Initialize Canvas Component 
         vis.initCanvas();        
-
+        
         // Initialize chart
         vis.updateVis();
     }
 
     protected initCanvas(): void {
         const vis =this ;
+        // Call Super Clas init CAnvase
         super.initCanvas();
 
         // Create tooltip
         vis.createTooltip();
 
         // // Create x and y axes
-        vis.xAxis = vis.chart.append("g").attr("class", "x-axis").attr("transform", `translate(0,${vis.height})`);
+        vis.xAxis = vis.chart.append("g")
+            .attr("class", "x-axis")
+            .attr("transform", `translate(0,${vis.height})`);
         vis.yAxis = vis.chart.append("g").attr("class", "y-axis");
     }
 
@@ -44,6 +49,7 @@ export class BarChart extends BaseChart {
             .style("pointer-events", "none")
             .style("box-shadow", "0px 4px 8px rgba(0,0,0,0.3)");
         
+        // Create hihlight Rectangle for tooltip when over Rect
         vis.highlightRect = vis.chart.append("rect")
             .attr("class", "highlight-rect")
             .style("fill", "none")
@@ -56,10 +62,7 @@ export class BarChart extends BaseChart {
         const vis = this;
 
         // Update y scale domain based on selected field
-        // vis.yScale.domain([0, d3.max(vis.data, d => d.yValue) as number]);
-        // vis.yScale.domain(d3.extent(vis.data,vis.yValueAccessor));
-        // vis.xScale.domain(d3.extent(vis.data,vis.xValueAccessor));
-        vis.yScale.domain([0, d3.max(vis.data, vis.yValueAccessor)*4]);
+        vis.yScale.domain([0, d3.max(vis.data, vis.yValueAccessor)]);
 
         // Update x-axis labels
         vis.xAxis.transition().duration(500).call(d3.axisBottom(vis.xScale));
@@ -101,7 +104,7 @@ export class BarChart extends BaseChart {
 
     protected setupScales() {
         const vis = this;
-        
+
         vis.xScale = d3.scaleBand()
             .domain(vis.data.map(d => d.xValue)) // Map categories
             .range([0, vis.width])
@@ -122,7 +125,6 @@ export class BarChart extends BaseChart {
 
     // this is listiner in the mous movement over the bar item  
     // to make the tooltip visible nad give it its data  
-   
     protected onMouseOver(event: any, d: any) {
         const vis = this;
         vis.tooltip
@@ -137,7 +139,7 @@ export class BarChart extends BaseChart {
             .style("left", (event.pageX + 10) + "px")
             .style("top", (event.pageY - 40) + "px");
 
-            vis.highlightRect = vis.chart.append("rect")
+        vis.highlightRect = vis.chart.append("rect")
             .attr("class", "highlight-rect")
             .style("fill", "none")
             .style("stroke", "blue")
@@ -155,12 +157,20 @@ export class BarChart extends BaseChart {
         
     }
 
-    protected onMouseMove(event: any) {
-        const vis = this;
+    protected mapData(data: any[]): void {
+        const vis =this ;
+        super.mapData(data);
 
-        vis.tooltip
-            .style("left", (event.pageX + 10) + "px")
-            .style("top", (event.pageY - 40) + "px");
+        const groupedData = d3.rollups(
+                vis.data,
+                (values) => d3.sum(values, (d) => d.yValue), // Sum Global Sales for each year
+                (d) => d.xValue
+            );
+        
+        vis.data= groupedData
+            .map(([xValue, yValue]) => ({ xValue: xValue, yValue }))
+            .sort((a, b) => a.xValue - b.xValue); // Sort by year
+        
     }
 
 }
