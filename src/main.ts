@@ -1,5 +1,4 @@
 import './style.css';
-
 import { ChartConfig } from "./charts/chartConfig";
 import { chartRegistry } from "./config/registrationConfig";
 import { renderChart } from "./helpers/chartRenderer";
@@ -10,7 +9,8 @@ const scatterFilters = document.getElementById("scatter-filters") as HTMLElement
 const filterCheckboxes = document.querySelectorAll<HTMLInputElement>("#scatter-filters input");
 let currentChartType = "scatterChart";
 
-// Reference to the description element
+
+// the description element
 const chartDescription = document.getElementById('chart-description');
 
 // Function to update the chart description
@@ -33,23 +33,14 @@ document.getElementById("chart-type")!.addEventListener("change", (event) => {
 const loadChart = () => {
     const selectedChart = chartSelect.value;
 
-    // Show checkboxes only for scatter chart
+    // Show checkboxes for scatter chart
+    // Neewd to redesign in a better architectured way 
     scatterFilters.style.display = selectedChart === "scatterChart" ? "block" : "none";
 
+    // Selected Chart Config
     let config = chartRegistry.get(selectedChart).chartConfig
 
-    DataLoader(config!.dataSetURL, 100, (data: any[]) => {
-        // Apply filtering for scatter plot
-        if (selectedChart === "scatterChart") {
-            const selectedDifficulties = Array.from(filterCheckboxes)
-                .filter(checkbox => checkbox.checked)
-                .map(checkbox => checkbox.value);
-            data = data.filter(d => selectedDifficulties.includes(d.difficulty));
-        }
-
-        // Render chart
-        renderChart(selectedChart, data, chartRegistry);
-    });
+    DataLoader(config!.dataSetURL, 100, (data: any[]) => renderChart(selectedChart, data, chartRegistry));
 };
 
 // Listen for dropdown changes

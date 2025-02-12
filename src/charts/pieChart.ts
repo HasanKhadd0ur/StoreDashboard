@@ -87,6 +87,25 @@ export class PieChart extends BaseChart {
             .attr('d', vis.arc);
 
         slices.exit().remove();
+        // Add text labels inside the slices
+        const labels = vis.chart.selectAll('.label')
+            .data(vis.pie(vis.data), (d: any) => d.data.xValue);
+
+        labels.enter()
+            .append('text')
+            .attr('class', 'label')
+            .attr('transform', (d: any) => `translate(${vis.arc.centroid(d)})`) // Position text at slice center
+            .attr('dy', '0.35em') // Adjust vertical alignment
+            .style('text-anchor', 'middle') // Center text
+            .style('fill', '#fff') // White text for contrast
+            .style('font-size', '12px')
+            .text((d: any) => `${d.data.xValue}: ${d.data.yValue}`)
+            .merge(labels)
+            .transition().duration(500)
+            .attr('transform', (d: any) => `translate(${vis.arc.centroid(d)})`);
+
+        labels.exit().remove();
+ 
     }
 
     protected onMouuseOut(event: any) {
